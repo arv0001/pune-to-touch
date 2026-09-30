@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pune by Touch – A tactile navigation board game</title>
+<meta name="description" content="Accessible tactile navigation board game inspired by Pune.">
+<style>
+:root{--primary:#E63946;--secondary:#1D3557;--yellow:#FFB703;--teal:#2A9D8F;--bg:#fff;--alt:#F8F9FA;--text:#0B0F19}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Arial,sans-serif;font-size:18px;line-height:1.6;color:var(--text);background:var(--bg)}
+h1,h2,h3{font-family:Nunito,Arial,sans-serif;line-height:1.2}h1{font-size:clamp(32px,6vw,52px)}h2{font-size:clamp(26px,4vw,36px);color:var(--secondary)}
+a{color:var(--primary);font-weight:700}.container{width:min(1120px,92%);margin:auto}
+section{padding:68px 0}section:nth-of-type(even){background:var(--alt)}
+header{position:sticky;top:0;z-index:10;background:#fffffff5;border-bottom:2px solid #ddd;backdrop-filter:blur(8px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}.logo{font-size:22px;color:var(--secondary);text-decoration:none;white-space:nowrap}
+nav ul{display:flex;flex-wrap:wrap;gap:4px 12px;list-style:none;margin:0;padding:0}nav a{text-decoration:none;color:var(--secondary);padding:7px;border-radius:7px}
+nav a:hover,nav a:focus{background:#eef3ff;outline:3px solid var(--yellow)}
+.controls{display:flex;gap:8px}.small{border:2px solid var(--secondary);background:#fff;color:var(--secondary);padding:7px 10px;border-radius:8px;font-weight:800;cursor:pointer}
+.hero{padding:80px 0;background:linear-gradient(135deg,#fff,#eef4ff)}.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:35px;align-items:center}
+.hero p{font-size:1.08rem}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.btn{display:inline-block;background:var(--primary);color:#fff;padding:12px 18px;border:2px solid var(--primary);border-radius:12px;text-decoration:none;font-weight:800;min-height:48px}.btn.secondary{background:#fff;color:var(--secondary);border-color:var(--secondary)}
+.btn:focus,.small:focus{outline:4px solid var(--yellow);outline-offset:2px}
+.board-visual{min-height:330px;background:#edf2f7;border:3px solid var(--secondary);border-radius:20px;padding:18px;position:relative;overflow:hidden;box-shadow:0 10px 28px #0002}
+.road{position:absolute;height:9px;background:#fff;border:3px solid var(--secondary);border-radius:10px;transform-origin:left center}.r1{width:90%;left:5%;top:48%;transform:rotate(-12deg)}.r2{width:72%;left:12%;top:72%;transform:rotate(17deg)}.r3{width:60%;left:24%;top:25%;transform:rotate(55deg)}.r4{width:55%;left:19%;top:84%;transform:rotate(-55deg)}
+.dot{position:absolute;width:28px;height:28px;background:var(--primary);border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 2px var(--primary)}.d1{left:16%;top:38%}.d2{left:48%;top:54%}.d3{left:76%;top:30%}.d4{left:68%;top:74%}.d5{left:30%;top:77%}
+.label{position:absolute;background:#fff;border:2px solid var(--secondary);border-radius:7px;padding:3px 7px;font-size:13px;font-weight:800}.l1{left:8%;top:15%}.l2{right:7%;top:14%}.l3{left:38%;bottom:7%}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:22px}.card{background:#fff;border:2px solid #e1e5ea;border-radius:14px;padding:18px;box-shadow:0 3px 10px #0000000b}
+.tag{display:inline-block;background:#eef2ff;color:var(--secondary);border:1px solid #c7d2fe;border-radius:999px;padding:4px 10px;margin:3px;font-weight:700;font-size:14px}
+.steps{display:grid;gap:14px}.step{display:flex;gap:14px;align-items:flex-start}.num{min-width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--secondary);color:#fff;font-weight:900}
+details{background:#fff;border:2px solid #ddd;border-radius:12px;padding:12px;margin-top:18px}summary{font-weight:800;color:var(--secondary);cursor:pointer}
+.skip{position:absolute;left:-9999px}.skip:focus{left:10px;top:10px;background:#000;color:#fff;padding:10px;z-index:100}
+.high{--primary:#d00000;--secondary:#000;--yellow:#ffd000;--bg:#fff;--alt:#eee;--text:#000}.large{font-size:21px}
+footer{background:var(--secondary);color:#fff;padding:42px 0}footer h2,footer h3{color:#fff}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.nav{flex-wrap:wrap}nav{order:3;width:100%}nav ul{justify-content:center}.controls{margin-left:auto}}
+@media(max-width:600px){nav ul{display:grid;grid-template-columns:repeat(2,1fr)}.small{font-size:13px}.hero{padding:55px 0}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="container nav">
+<a class="logo" href="#home">🖐️ Pune by Touch</a>
+<nav aria-label="Main navigation"><ul>
+<li><a href="#home">Home</a></li><li><a href="#board">Game Board</a></li><li><a href="#how-to-play">How to Play</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#skills">Skills</a></li><li><a href="#making">Making</a></li><li><a href="#contact">Contact</a></li>
+</ul></nav>
+<div class="controls"><button class="small" id="contrastBtn" aria-pressed="false">High contrast</button><button class="small" id="textBtn" aria-pressed="false">Larger text</button></div>
+</div></header>
+
+<main id="main">
+<section class="hero" id="home"><div class="container hero-grid">
+<div><h1>Pune by Touch</h1><p><strong>A tactile navigation board game</strong></p>
+<p>Explore a tactile map of Pune, plan routes across real neighbourhoods, identify landmarks and adapt when the path changes. It is a hands-on practice activity and does not replace professional orientation-and-mobility training.</p>
+<div class="actions"><a class="btn" href="#board">See the Game Board</a><a class="btn secondary" href="#how-to-play">How to Play</a></div>
+</div>
+<div class="board-visual" role="img" aria-label="Stylised raised-line map of Pune with routes, stations, textures and labels">
+<div class="road r1"></div><div class="road r2"></div><div class="road r3"></div><div class="road r4"></div>
+<div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div><div class="dot d4"></div><div class="dot d5"></div>
+<div class="label l1">Shivajinagar</div><div class="label l2">Viman Nagar</div><div class="label l3">Kothrud</div>
+</div>
+</div></section>
+
+<section id="board"><div class="container"><h2>The Pune Tactile Map</h2>
+<p>The board is a raised-line map of key Pune areas. Regions and stations use distinct textures, Braille labels and tactile icons. Bus, metro and auto routes use different line styles so players can identify them by touch.</p>
+<h3>Famous Pune areas</h3><div>
+<span class="tag">Shivajinagar</span><span class="tag">FC Road / Deccan</span><span class="tag">MG Road / Camp</span><span class="tag">Koregaon Park</span><span class="tag">Viman Nagar</span><span class="tag">Kothrud</span><span class="tag">Baner</span><span class="tag">Hinjewadi</span><span class="tag">Hadapsar</span><span class="tag">Yerawada</span><span class="tag">Aundh</span><span class="tag">Pimpri-Chinchwad</span>
+</div>
+<div class="cards"><div class="card"><h3>🖐 Raised borders</h3><p>Raised zones and major roads can be traced with fingers.</p></div><div class="card"><h3>⠃ Braille</h3><p>Station names and key landmarks can be labelled in Braille.</p></div><div class="card"><h3>◉ Textures</h3><p>Different surfaces identify parks, markets and residential zones.</p></div><div class="card"><h3>↪ Detours</h3><p>Detour cards introduce route changes and new decisions.</p></div></div>
+<div class="actions"><a class="btn" href="#how-to-play">How to Play</a><a class="btn secondary" href="#accessibility">Accessibility</a></div>
+</div></section>
+
+<section id="how-to-play"><div class="container"><h2>Objective and Setup</h2><p><strong>Objective:</strong> Plan and follow a route on the tactile map to reach a moving target using transport modes, tactile clues and route changes.</p>
+<div class="steps">
+<div class="step"><span class="num">1</span><div><strong>Place the board.</strong><br>Put the board on a stable surface.</div></div>
+<div class="step"><span class="num">2</span><div><strong>Choose a piece.</strong><br>Each player chooses a tactile player piece.</div></div>
+<div class="step"><span class="num">3</span><div><strong>Draw cards.</strong><br>Draw a destination card and transport-mode card.</div></div>
+<div class="step"><span class="num">4</span><div><strong>Plan and move.</strong><br>Trace valid routes and identify stations by touch.</div></div>
+<div class="step"><span class="num">5</span><div><strong>Adapt.</strong><br>If a detour appears, find an alternative route.</div></div>
+</div>
+<details><summary>Example turn</summary><p>A player receives Koregaon Park as the destination and a bus card. They trace the available raised bus route, identify stations, move their tactile piece and respond to any detour card.</p></details>
+</div></section>
+
+<section id="accessibility"><div class="container"><h2>Designed for Accessibility</h2>
+<div class="cards"><div class="card"><h3>For blind players</h3><p>Braille, raised borders, tactile icons and textured zones provide physical information.</p></div><div class="card"><h3>For low-vision players</h3><p>Large text, strong contrast and clear spacing support easier reading.</p></div><div class="card"><h3>For screen readers</h3><p>Semantic headings, landmarks and descriptive labels support assistive technology.</p></div><div class="card"><h3>For keyboard users</h3><p>Navigation and controls can be operated without a mouse.</p></div></div>
+<div class="actions"><button class="btn" id="speakBtn">🔊 Read page aloud</button></div>
+</div></section>
+
+<section id="skills"><div class="container"><h2>Real-Life Skills You Practice</h2>
+<div class="cards"><div class="card"><h3>Spatial awareness</h3><p>Understand how areas connect on a map.</p></div><div class="card"><h3>Route planning</h3><p>Choose possible paths between locations.</p></div><div class="card"><h3>Memory</h3><p>Recall landmarks and route sequences.</p></div><div class="card"><h3>Decision-making</h3><p>Select transport modes and routes.</p></div><div class="card"><h3>Adapting to change</h3><p>Handle detours and unexpected blocks.</p></div></div>
+<p style="margin-top:20px"><strong>Note:</strong> This game is a tabletop practice tool and does not replace professional orientation-and-mobility training.</p>
+</div></section>
+
+<section id="making"><div class="container"><h2>From Research to Final Board</h2>
+<div class="steps"><div class="step"><span class="num">1</span><div><strong>Research</strong><br>Understand accessibility needs.</div></div><div class="step"><span class="num">2</span><div><strong>Concept</strong><br>Define the core skills and game rules.</div></div><div class="step"><span class="num">3</span><div><strong>Sketches</strong><br>Explore map layouts, textures and icons.</div></div><div class="step"><span class="num">4</span><div><strong>Prototype</strong><br>Test materials, raised lines and Braille placement.</div></div><div class="step"><span class="num">5</span><div><strong>Testing</strong><br>Improve clarity, durability and rule understanding.</div></div></div>
+</div></section>
+
+<section id="contact"><div class="container"><h2>Get in Touch</h2><p>Questions, feedback or interest in pilot testing?</p><div class="card"><p><strong>Email:</strong> <a href="mailto:hello@punebytouch.example">hello@punebytouch.example</a></p><p><strong>Phone/WhatsApp:</strong> <a href="tel:+910000000000">+91 00000 00000</a></p><p><strong>Location:</strong> Pune, India</p></div></div></section>
+</main>
+
+<footer><div class="container"><h2>Pune by Touch</h2><p>A tactile navigation board game for practicing spatial awareness, route planning, memory and decision-making.</p><p>© <span id="year"></span> Pune by Touch. All rights reserved.</p></div></footer>
+
+<script>
+const body=document.body,contrast=document.getElementById('contrastBtn'),text=document.getElementById('textBtn');
+contrast.onclick=()=>{const on=body.classList.toggle('high');contrast.setAttribute('aria-pressed',on);contrast.textContent=on?'Normal contrast':'High contrast'};
+text.onclick=()=>{const on=body.classList.toggle('large');text.setAttribute('aria-pressed',on);text.textContent=on?'Default text':'Larger text'};
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('speakBtn').onclick=()=>{if(!('speechSynthesis'in window)){alert('Text-to-speech is not supported in this browser.');return}speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(document.querySelector('main').innerText))};
+</script>
+</body>
+</html>
